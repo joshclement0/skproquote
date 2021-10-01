@@ -26,6 +26,10 @@ def load_models():
     model1.load_weights("./m1checkpoints/point")
 
 
+@app.route('/',methods=["GET"])
+def form():
+    return render_template("readme.html")
+
 @app.route('/images',methods=['GET'])
 def getImg():
     filename = request.args.get("img")
