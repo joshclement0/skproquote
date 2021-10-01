@@ -1,0 +1,54 @@
+<html>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <body>
+        <div>
+            job:<textarea type="text" id="job" rows="6" cols=40>{"5062806":"2","9310331":"1","5066603":"2","3401437":"1", "5020436":"1"}</textarea>
+            jobID:<input type="text" id="jobid" value="8823"/>
+            time:<input type ="text" id="time" value = "0"/>
+            <br><button onclick="test1()">Send</button>
+        </div>
+        <br><br>
+        <div>
+            full:<textarea type="text" id="full" rows="2"></textarea>
+            <button onclick="test0()">Send full</button>
+        </div><br><br>
+        <button onclick="test2()">Send Default</button>
+        <br>
+        <br>
+        Result:
+        <div id="result"></div>
+    </body>
+    <script>
+        function test0(){
+            console.log(document.getElementById("full").value)
+            formData = JSON.parse(document.getElementById("full").value)
+            test(formData)
+        }
+        function test1(){
+            formData = {job: JSON.parse(document.getElementById("job").value),
+                        jobID: document.getElementById("jobid").value,
+                        time: document.getElementById("time").value}
+            test(formData)
+        }
+        function test2(){
+            formData = {job:{5062806:2,9310331:1,5066603:2,3401437:1,5020436:1},jobID:832345}
+            test(formData)
+        }
+        function test(formData){
+            fetch(`${window.origin}/api/predict`, {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(formData),
+                cache: "no-cache",
+                headers: new Headers({
+                "content-type": "application/json"
+                })
+            })
+            .then(function(response) {console.log(response);
+                response.text().then(function(text){
+                    console.log(text)
+                    document.getElementById("result").innerHTML=text
+                })})
+        }
+    </script>
+</html>
