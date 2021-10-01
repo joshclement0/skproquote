@@ -11,7 +11,7 @@ def init(articlenums):
         neededDict = {}
         for k in allDict:
             for a in articlenums:
-                if a in allDict[k]["job"]:
+                if str(a) in allDict[k]["job"]:
                     neededDict[k]=allDict[k]["job"]
                     break
         return dict_add([neededDict[k] for k in neededDict])
@@ -22,21 +22,29 @@ def dict_add(dicts):
         for item in d1:
             if item in d:
                 d[item]+=d1[item]
+                # d[item]+=1
             else:
                 d[item]=d1[item]
+                # d[item]=1
     return d
-def dict_eval(dict1,*keys):
+def dict_eval(dict1,keys):
     nm=1000
+    val=0
+    length=0
     for k in keys:
-        if not k in dict1:
+        if not str(k) in dict1:
             continue
-        one_dict=dict1[k]
-        val = one_dict[k]
-        for k1 in one_dict:
-            one_dict[k1]=int(nm*one_dict[k1]/val/len(keys))/nm
-        del one_dict[k]
-        dict1[k] = one_dict
-    dict1 = dict_add([dict1[k] for k in keys if k in dict1])
-    return Counter(dict1).most_common(10)
+        val += dict1[k]
+        length+=1
+        del dict1[k]
+    if length ==0:
+      raise Exception("No Keys found")
+    val = val/length
+    retDict = {}
+    for k,v in sorted(dict1.items(),key=lambda item: item[1]):
+      retDict[k]= v/val
+      if len(retDict)>9:
+        break
+    return retDict
 def recommend(*keys):
-    return dict(dict_eval(init(keys),*keys))
+    return dict(dict_eval(init(keys),[str(k)for k in keys]))
