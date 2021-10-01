@@ -27,7 +27,7 @@ def load_models():
 
 
 @app.route('/',methods=["GET"])
-def form():
+def formHome():
     return render_template("readme.html")
 
 @app.route('/images',methods=['GET'])
