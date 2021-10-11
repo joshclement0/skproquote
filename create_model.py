@@ -1,9 +1,8 @@
-import pandas as pd
 import numpy as np
 import tensorflow as tf
 import json
 #CREATE_MODEL
-
+divideNum=5
 base_learning_rate = .001
 def create_model(input_num,train=False):
   model = tf.keras.Sequential()
@@ -18,13 +17,17 @@ def create_model(input_num,train=False):
   return model
 
 def getLables():
-  matr = pd.read_csv("./files/matrix.csv")
-  low = matr.Fra.tolist()
-  height = matr.Til.tolist()
-  values=[low[0]] + height
-  values.sort()
-
-  labels2 = values + ["totalItems","sumItems","time"]
+  unique_numbers=[]
+  with open('./files/expense_data.txt') as json_file:
+    allDict = json.load(json_file)
+    for k in allDict:
+      unique_numbers.extend(allDict[k]['job'].keys())
+  unique_numbers = list(set(unique_numbers)) 
+  for i in range(len(unique_numbers)):
+    unique_numbers[i] = int(unique_numbers[i])//5
+  unique_numbers = list(set(unique_numbers))
+  unique_numbers.sort()
+  labels2 = unique_numbers + ["totalItems","sumItems","time"]
   return labels2
 def dict_to_row(item,labels):
   x = np.zeros(len(labels)-1)
@@ -32,8 +35,7 @@ def dict_to_row(item,labels):
   for key in item:
     if not str(key).isnumeric():
         continue
-    ind = next(i for i in labels if i>=int(key)) if len(key)==7 else -1
-    pos = labels.index(ind) if ind in labels else -5
+    pos = labels.index(int(key)//divideNum) if int(key)//divideNum in labels else -5
     if pos == -5 :
         continue
     count_found.append(key)
@@ -63,15 +65,18 @@ def run():
     try:
       model = create_model(input_len,train=True)
       model.load_weights("./m1checkpoints/point")
-      model.fit(dataset, epochs=40,verbose=0)
+      model.fit(dataset, epochs=60,verbose=0)
     except:
       model = create_model(input_len,train=True)
-      model.fit(dataset, epochs=40,verbose=0)
+      model.fit(dataset, epochs=60,verbose=0)
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=base_learning_rate/100),
                     loss='mse',
                     metrics=['accuracy'])
-    model.fit(dataset, epochs=60,verbose=0)
+    model.fit(dataset, epochs=80,verbose=0)
+
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=base_learning_rate/5000),
+                    loss='mse',
+                    metrics=['accuracy'])
+    model.fit(dataset, epochs=80,verbose=0)
 
     model.save_weights('./m1checkpoints/point')
-if __name__ == '__main__':
-  run()
