@@ -53,35 +53,38 @@ def home():
         p_val = .9
     full_df = pd.read_csv("./files/results.csv")
     
-    for i in range(2):
-        res_df = full_df
-        color = "b."
-        if i:
-            res_df = res_df[res_df.pNFound>p_val]
-            name = "files/halfGraph"
-            pretitle = "%.2f"%(p_val)+" in Model -"
-        else:
-            name = "files/fullGraph"
-            pretitle = ''
-        name+="0.png"
-        y_hat = res_df.guess
-        y_tru = res_df.real
-        vals = y_tru-y_hat
-        factor = 100
-        c=Counter([int(a*factor)/factor for a in vals]) 
-        if outlier:
-            x = [x for x in c if c[x]>1]
-        else:
-            x = [x for x in c]
-        y = [c[_x] for _x in x]
-        std = np.std([x[i] for i in range(len(x)) for j in range(y[i])])
-        avg = np.dot(x,y)/sum(y)
-        plt.plot(x,y,color)
-        plt.xlabel("Actual - Model Guess")
-        plt.ylabel("Count")
-        plt.title(pretitle+' Mean: '+"%.2f"%avg+' Std: '+"%.2f"%std)
-        plt.savefig(name)
-        plt.clf()
+    res_df = full_df
+    color = "b."
+    res_df = res_df[res_df.pNFound>p_val]
+    name = "files/fullGraph"
+    pretitle = "%.2f"%(p_val)+" in Model -"
+    name+="0.png"
+    y_hat = res_df.guess
+    y_tru = res_df.real
+    vals = y_tru-y_hat
+    x = y_tru
+    y = y_hat
+    plt.plot(x,y,'ro',markersize=2)
+    plt.xlabel("Real Hours")
+    plt.ylabel("Guess Hours")
+    plt.title(pretitle+' Real vs Guess')
+    plt.savefig("files/halfGraph0.png")
+    plt.clf()
+    factor = 100
+    c=Counter([int(a*factor)/factor for a in vals]) 
+    if outlier:
+        x = [x for x in c if c[x]>1]
+    else:
+        x = [x for x in c]
+    y = [c[_x] for _x in x]
+    std = np.std([x[i] for i in range(len(x)) for j in range(y[i])])
+    avg = np.dot(x,y)/sum(y)
+    plt.plot(x,y,color)
+    plt.xlabel("Actual - Model Guess")
+    plt.ylabel("Count")
+    plt.title(pretitle+' Mean: '+"%.2f"%avg+' Std: '+"%.2f"%std)
+    plt.savefig(name)
+    plt.clf()
     return render_template("home.html",main_img1 = "/images?img=fullGraph0.png",alt_img1="/images?img=halfGraph0.png")
 
 @app.route('/api/add',methods=["GET"])
