@@ -80,3 +80,5 @@ def run():
     model.fit(dataset, epochs=80,verbose=0)
 
     model.save_weights('./m1checkpoints/point')
+if __name__ == "__main__":
+  run()
