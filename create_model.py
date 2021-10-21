@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import json
 #CREATE_MODEL
-divideNum=5
+divideNum=25
 base_learning_rate = .001
 def create_model(input_num,train=False):
   model = tf.keras.Sequential()
@@ -24,7 +24,7 @@ def getLables():
       unique_numbers.extend(allDict[k]['job'].keys())
   unique_numbers = list(set(unique_numbers)) 
   for i in range(len(unique_numbers)):
-    unique_numbers[i] = int(unique_numbers[i])//5
+    unique_numbers[i] = int(unique_numbers[i])//divideNum
   unique_numbers = list(set(unique_numbers))
   unique_numbers.sort()
   labels2 = unique_numbers + ["totalItems","sumItems","time"]
