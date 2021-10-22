@@ -77,11 +77,10 @@
             .then(function(response) {console.log(response);
                 response.text().then(function(text){
                     console.log(text)
-                    document.getElementById("result").innerHTML=text
                     t = document.getElementById('tbl')
                     
                     for(i=1;i<t.rows.length;i++){
-                        item = t.row[i].cells[i].children[0]
+                        item = t.rows[i].cells[1].children[0]
                         if (text.found.includes(item.value)){
                             item.style.backgroundColor="lightgreen"
                         }
@@ -94,7 +93,7 @@
             for (n in formData){
                 query+="nums="+n.toString()+"&"
             }
-            fetch(`${window.origin}/api/recommend?`, {
+            fetch(`${window.origin}/api/recommend?`+query, {
                 method: "GET",
                 credentials: "include",
                 cache: "no-cache",
