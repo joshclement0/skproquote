@@ -65,19 +65,19 @@ def run():
     try:
       model = create_model(input_len,train=True)
       model.load_weights("./m1checkpoints/point")
-      model.fit(dataset, epochs=60,verbose=0)
+      model.fit(dataset, epochs=30,verbose=0)
     except:
       model = create_model(input_len,train=True)
-      model.fit(dataset, epochs=60,verbose=0)
+      model.fit(dataset, epochs=30,verbose=0)
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=base_learning_rate/100),
                     loss='mse',
                     metrics=['accuracy'])
-    model.fit(dataset, epochs=80,verbose=0)
+    model.fit(dataset, epochs=20,verbose=0)
 
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=base_learning_rate/5000),
                     loss='mse',
                     metrics=['accuracy'])
-    model.fit(dataset, epochs=80,verbose=0)
+    model.fit(dataset, epochs=20,verbose=0)
 
     model.save_weights('./m1checkpoints/point')
 if __name__ == "__main__":
