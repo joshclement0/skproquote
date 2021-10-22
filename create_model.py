@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import json
 #CREATE_MODEL
-divideNum=25
+divideNum=100
 base_learning_rate = .001
 def create_model(input_num,train=False):
   model = tf.keras.Sequential()
