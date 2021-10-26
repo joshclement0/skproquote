@@ -126,6 +126,7 @@
         function sendReccomend(formData){
             query=""
             for (n in formData){
+                if (n.length <7)continue
                 query+="nums="+n.toString()+"&"
             }
             fetch(`${window.origin}/api/recommend?`+query, {
