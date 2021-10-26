@@ -138,7 +138,7 @@
                 response.text().then(function(text){
                     text = JSON.parse(text)
                     console.log(text)
-                    document.getElementById("recc").innerHTML="Reccomended Items: "+text.keys().toString()
+                    document.getElementById("recc").innerHTML="Reccomended Items: "+Object.keys(text).toString()
                 })})
         }
     </script>
