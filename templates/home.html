@@ -1,4 +1,46 @@
-<h1>Results</h1><br>Result of Model 1 
-<br><img src="{{main_img1}}">
-<img src="{{alt_img1}}"><br>
+<h1>Results of the Current Model</h1><br>
 <br>
+    <div><img src="{{main_img1}}">
+        <div style="width:40%;padding:30px;margin-top:120px;float:left;">
+            This graph plot the models projected hours against the actual hours registered for the job.<br>
+            For a perfect model, all points should be along the optimal line. <br><br>
+            When making statements about how well the model is working, there are two things to talk about:<br>
+            1. How well the actual data trends toward the optimal? What is the direction of the data?<br>
+            2. How spread out is the model? How close are points to the model?<br>
+            <br>
+            
+        </div></div>
+    <div><img src="{{alt_img1}}"> 
+        <div style="width:40%;padding:30px;margin-top:120px;float:left;">
+            This graph plot the average models projected hours against the actual hours registered for the job. This means at any given "Actual Result", a red point is assigned to the average value given to the all jobs that registered that result<br>
+            The blue dots are also calculated from all jobs registering a specific time result, however they plot the standard deviation above the average. (The standard deviation is useful because it signifies the spread of the data, a std of 20 says that 70% of data lies within +/- 20 of the average). <br>
+            <br>
+            This graph is then used to summarize the data in the graph above by limiting the number of points shown. Therefore the same trends should follow for better models. <br>
+            
+            
+        </div></div>
+    <div><img src="{{alt_img2}}"> 
+        <div style="width:40%;padding:30px;margin-top:120px;float:left;">
+            This graph is the standard bell curve used to describe most data. It describes the number of the times the difference of the data occured. Ideally there should only be one point where the difference between the actual time and the model's guess is zero. <br>
+            Points on the right of the graph symbolize guesses that were made much lower than realistically speaking<br>
+            Points on the left (negative numbers) occur when the model has guess a value higher than actuallity<br>
+            <br>
+            The average and standard deviation are given above. Optimally the mean, or average should be zero, as well as the standard deviation (std). 
+        </div></div>
+    <div><img src="{{alt_img3}}"> 
+        <div style="width:40%;padding:30px;margin-top:120px;float:left;">
+            This graph contains both the bell curve of the actual data reported for jobs, and the times my model predicted for those jobs. <br>
+            <br>
+            This shows both how skewed the time plumbers take (they work a lot more smaller jobs), and how skewed the model's guesses are<br>
+            This does not show a correspondance between the correct times and the model's guess, however a good model should have roughly the same trend as the actual data<br>
+            <br>
+            The purpose of this graph is highlight the spread of jobs performed by the craftsman. This will also explain some of the reasoning of the model ie the model might guess lower if most of the jobs performed only took a few hours
+        </div></div>
+    <br>
+<br>
+You can change the maximum value of these graph by 
+<form action="" method="get">
+    <label for="size">Maximum:</label>
+    <input type="text" id="size" name="size" placeholder="200"><br><br>
+    <input type="submit" value="Submit">
+  </form>

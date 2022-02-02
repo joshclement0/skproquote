@@ -3,14 +3,13 @@ import flask
 from flask import request, render_template, send_file
 
 import pandas as pd
-from collections import Counter
-from matplotlib import pyplot as plt
 
 import os
 
 import create_model
 import refine
 import recomender
+import create_img
 
 #enabling GPU increases the speed
 
@@ -51,41 +50,13 @@ def home():
         p_val = float(p_val)
     except:
         p_val = .9
-    full_df = pd.read_csv("./files/results.csv")
-    
-    res_df = full_df
-    color = "b."
-    res_df = res_df[res_df.pNFound>p_val]
-    name = "files/fullGraph"
-    pretitle = "%.2f"%(p_val)+" in Model -"
-    name+="0.png"
-    y_hat = res_df.guess
-    y_tru = res_df.real
-    vals = y_tru-y_hat
-    x = y_tru
-    y = y_hat
-    plt.plot(x,y,'ro',markersize=2)
-    plt.xlabel("Real Hours")
-    plt.ylabel("Guess Hours")
-    plt.title(pretitle+' Real vs Guess')
-    plt.savefig("files/halfGraph0.png")
-    plt.clf()
-    factor = 100
-    c=Counter([int(a*factor)/factor for a in vals]) 
-    if outlier:
-        x = [x for x in c if c[x]>1]
-    else:
-        x = [x for x in c]
-    y = [c[_x] for _x in x]
-    std = np.std([x[i] for i in range(len(x)) for j in range(y[i])])
-    avg = np.dot(x,y)/sum(y)
-    plt.plot(x,y,color)
-    plt.xlabel("Actual - Model Guess")
-    plt.ylabel("Count")
-    plt.title(pretitle+' Mean: '+"%.2f"%avg+' Std: '+"%.2f"%std)
-    plt.savefig(name)
-    plt.clf()
-    return render_template("home.html",main_img1 = "/images?img=fullGraph0.png",alt_img1="/images?img=halfGraph0.png")
+    try:
+        graph_limit = request.args.get("size")
+        graph_limit = int(graph_limit)
+    except:
+        graph_limit = 200
+    name1,name2,name3,name4 = create_img.create(outlier,p_val,graph_limit)
+    return render_template("home.html",main_img1 = "/images?img="+name1,alt_img1="/images?img="+name3,alt_img2="/images?img="+name2,alt_img3="/images?img="+name4)
 
 @app.route('/api/add',methods=["GET"])
 def form():
@@ -162,8 +133,8 @@ def rec():
         articleNums.append(int(i))
     return recomender.recommend(*articleNums)
 if __name__ == '__main__':
-    load_models()
-    port = int(os.environ.get('PORT', 5000))
+    # load_models()
+    port = int(os.environ.get('PORT', 5005))
 #     from waitress import serve
 #     serve(app, host="0.0.0.0", port=port)
     app.run(host='0.0.0.0',port=port)
